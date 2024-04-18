@@ -6,24 +6,25 @@
 <title>Monopoly Board</title>
 <link rel="stylesheet" href="styles.css">
 <script src="tiles.js" defer></script>
+<script src="script.js" defer></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
-  <div class="container">
-    <div id="right-section">
-      <div id="board" class="board"></div>
-      <i id="plane-icon" class="fas fa-plane" style="display: none;"></i>
-    </div>
-    <div id="left-section">
-      <div class="controls">
-        <button id="log-btn">Log</button>
-        <button id="reset-button">Replay</button>
-      </div>
-      <div id="log-content" class="log"></div>
-    </div>
-  </div>
   
-<script src="script.js" defer></script>
+  <div id="board" class="board">
+    <button id="set-start-button" hidden>Reset</button>
+    <button id="reset-button" hidden>Replay</button>
+    <div id="counter-div">
+      <span id="move-status" style="font-size: 13px; font-weight: bold;"></span><br>
+      <span id="move-count" style="font-size: 35px; color: darkred;"></span>
+    </div>
+    <span id="starting-pos" style="font-size: 30px;"></span>
+    <div id="log-content" class="log"></div>
+  </div>
+  <i id="plane-icon" class="fas fa-plane" style="display: none;"></i>
+  
+  
+  
+
 </body>
 </html>
