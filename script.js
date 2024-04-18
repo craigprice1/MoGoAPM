@@ -7,6 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let actualMoves = []; // Array to store actual moves made during replay
     const boardWidth = 11; // Assuming a board with 11 columns
     const boardHeight = 11; // Assuming a board with 11 rows
+    const counterSpan = this.getElementById('move-count')
+    const moveStatusSpan = this.getElementById('move-status')
+    const resetButton = this.getElementById('reset-button')
+    const setStartButton = this.getElementById('set-start-button')
+    const startSpan = this.getElementById('starting-pos')
+    const planeIcon = this.getElementById('plane-icon')
+    const infoDiv = document.getElementById('log-content');
 
 
     // Function to create tiles on the board
@@ -100,12 +107,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 logMove(tileElement);
             } else {
                 // Calculate the next tile based on the number of moves
-
                 movesMade++; // Increment the current position
                 highlightNextTile(tileElement, actualMoves[movesMade]);
-                // }
+                counterSpan.dataset.remaining = counterSpan.dataset.remaining -1
+                moveStatusSpan.innerText = 'Remaining Moves'
+                counterSpan.innerText = counterSpan.dataset.remaining
             }
-
         });
     }
 
@@ -115,12 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const rect = tileElement.getBoundingClientRect();
         const tileCenterX = rect.left + rect.width / 2; // X-coordinate of the center of the tile
         const tileCenterY = rect.top + rect.height / 2; // Y-coordinate of the center of the tile
-
         // Move the plane icon to the center of the clicked tile
-        const planeIcon = document.getElementById('plane-icon');
         if (planeIcon) {
             // Show the plane icon
-            const planeIcon = document.getElementById('plane-icon');
             planeIcon.style.display = 'block';
             // Adjust the position to center the plane icon
             const planeWidth = planeIcon.offsetWidth;
@@ -141,15 +145,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create an object with the extracted data
         const tileData = { name, color, x, y };
 
-        const infoDiv = document.getElementById('log-content');
         if (previousTile === undefined) {
-            const startInfo = `Starting position: ${name}`;
+            const startInfo = `Starting Position \n ${name}`;
             startPosition = name;
             const startDiv = document.createElement('div');
             startDiv.innerText = startInfo;
             startDiv.dataset.name = name;
             startDiv.classList.add('log-entry'); // Add class for styling and event handling
             infoDiv.appendChild(startDiv);
+            resetButton.hidden = false;
+            startSpan.innerText = startInfo;
         } else {
             // Display the tile name and the number of moves from the previous tile
             if (previousTile !== undefined) {
@@ -187,10 +192,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Function to handle replay button click
-    document.getElementById('reset-button').addEventListener('click', function () {
+    resetButton.addEventListener('click', function () {
         // Reset the game state
         resetBoard();
     });
+
+    setStartButton.addEventListener('click', function () {
+        setStart();
+    })
 
 
     function resetBoard() {
@@ -204,10 +213,16 @@ document.addEventListener("DOMContentLoaded", function () {
             startingTile.classList.add('highlighted');
             previousTile = startingTile; // Set previousTile to the starting tile
         }
+        resetButton.hidden = true;
+        setStartButton.hidden = false;
         movePlaneToTile(startingTile)
 
         // Call highlightNextTile after resetting the board
         highlightNextTile(startingTile, actualMoves[movesMade]);
+        counterSpan.dataset.remaining = actualMoves.length
+        moveStatusSpan.innerText = 'Moves Logged'
+        counterSpan.innerText = actualMoves.length
+        
         // getNextLandingSpot(startingTile, actualMoves[movesMade])
     }
 
@@ -242,6 +257,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(targetTile)
         return targetTile;
+    }
+
+    function setStart() {
+        boardReset = false;
+        actualMoves = [];
+        planeIcon.style.display = 'none';
+        previousTile = undefined;
+        infoDiv.innerHTML = ''
+        document.querySelectorAll('.tile').forEach(tile => {
+            tile.classList.remove('highlighted');
+        });
+        moveStatusSpan.innerHTML = ''
+        counterSpan.innerHTML = ''
+        movesMade = 0;
     }
     tiles.forEach(createTile);
 });
