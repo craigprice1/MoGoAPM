@@ -15,13 +15,16 @@
   
   <div id="board" class="board">
     <button id="set-start-button" hidden>Reset</button>
+    <button id="undo-button" hidden>Undo</button>
     <button id="reset-button" hidden>Replay</button>
     <div id="counter-div">
       <span id="move-status" style="font-size: 13px; font-weight: bold; color: white;"></span><br>
       <span id="move-count" style="font-size: 35px; color: darkred;"></span>
     </div>
     <span id="starting-pos" style="font-size: 30px;"></span>
-    <div id="log-content" class="log"></div>
+    <span id="log-content" class="log">Moves<br></span>
+    <div id="next-moves" class="log">Moves from current position:</div>
+    <div id="go-moves" class="log">Complete board and move from go:</div>
   </div>
   <i id="plane-icon" class="fas fa-plane" style="display: none;"></i>
   

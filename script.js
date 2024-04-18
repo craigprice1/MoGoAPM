@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Add logic for if moves is greater than 12 then don't log it.
+    // Add logic to show next 3 tiles you will hit.
+    // Add logic to show next 3 tiles you will hit if you complete the board.
+    // Complete the undo function
+    // Make the plane face the direction of travel
+    // Ensure that when moves are logged in the log they spread over multiple lines.
+    // Look at styling for mobile - e.g. the plane not positioning correctly on iPhone
+    // Can this be made into an app?
     const board = document.getElementById('board');
     let startPosition
     let previousTile
@@ -10,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const counterSpan = this.getElementById('move-count')
     const moveStatusSpan = this.getElementById('move-status')
     const resetButton = this.getElementById('reset-button')
+    const undoButton = this.getElementById('undo-button')
     const setStartButton = this.getElementById('set-start-button')
     const startSpan = this.getElementById('starting-pos')
     const planeIcon = this.getElementById('plane-icon')
@@ -112,9 +121,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // User wants to move to the next station
-                        movePlaneToTile(nextStationTile);
+                        nextStation = document.querySelector(`.tile[data-name="${nextStationTile(tileElement)}"]`)
+                        previousTile = nextStation
+                        movePlaneToTile(nextStation);
+                        if (boardReset) highlightNextTile(nextStation, actualMoves[movesMade]);
+
                     } else {
                         movePlaneToTile(tileElement);
+                        if (boardReset) highlightNextTile(tileElement, actualMoves[movesMade]);
                     }
                 });
 
@@ -172,6 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // startDiv.classList.add('log-entry'); // Add class for styling and event handling
             // infoDiv.appendChild(startDiv);
             resetButton.hidden = false;
+            undoButton.hidden = false;
             startSpan.innerText = startInfo;
         } else {
             // Display the tile name and the number of moves from the previous tile
@@ -181,11 +196,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 const moveInfo = `${name} (${moves} moves)`;
                 actualMoves.push(moves)
                 // Create a new div element for the move and append it to the info div
-                const moveDiv = document.createElement('div');
-                moveDiv.innerText = moveInfo;
-                moveDiv.dataset.name = name;
-                moveDiv.classList.add('log-entry'); // Add class for styling and event handling
-                infoDiv.appendChild(moveDiv);
+                // const moveDiv = document.createElement('div');
+                // moveDiv.innerText = moveInfo;
+                // moveDiv.dataset.name = name;
+                // moveDiv.classList.add('log-entry'); // Add class for styling and event handling
+                // infoDiv.appendChild(moveDiv);
+                infoDiv.textContent = `Moves \n ${actualMoves}`
                 // Add event listener to toggle strikethrough on click
                 // moveDiv.addEventListener('click', function () {
                 //     this.classList.toggle('strikethrough');
@@ -236,6 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
             previousTile = startingTile; // Set previousTile to the starting tile
         }
         resetButton.hidden = true;
+        undoButton.hidden = true
         setStartButton.hidden = false;
         movePlaneToTile(startingTile)
 
@@ -297,6 +314,29 @@ document.addEventListener("DOMContentLoaded", function () {
         counterSpan.innerHTML = ''
         startSpan.innerHTML = ''
         movesMade = 0;
+        setStartButton.hidden = true;
+    }
+
+    function nextStationTile(currentTile) {
+        const currIndex = tiles.findIndex(tile => {
+            return parseInt(tile.x, 10) === parseInt(currentTile.dataset.x, 10) && parseInt(tile.y, 10) === parseInt(currentTile.dataset.y, 10);
+        });
+
+        let currentIndex = (currIndex + 1) % tiles.length;
+
+    // Loop through the array until a station tile is found or we reach the startIndex again
+    while (currentIndex !== currIndex) {
+        if (tiles[currentIndex].name.includes("Station")) {
+            // Found a station tile, return its index
+            return tiles[currentIndex].name;
+        }
+        // Move to the next index
+        currentIndex = (currentIndex + 1) % tiles.length;
+    }
+
+    // If no station tile is found between the startIndex and the end of the array,
+    // return -1 to indicate that no such index was found
+    return -1;
     }
     tiles.forEach(createTile);
 });
