@@ -101,8 +101,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Add click event listener to each tile
         tileElement.addEventListener('click', function () {
-            console.log('Tile click event triggered.');
+            if (startPosition !== undefined && tileElement.dataset.name === "Chance") {
+                swal.fire({
+                    title: "Chance Tile",
+                    text: "You have landed on a Chance tile. Do you want to move to the next station?",
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "Move to Next Station",
+                    cancelButtonText: "Stay Here"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User wants to move to the next station
+                        movePlaneToTile(nextStationTile);
+                    } else {
+                        movePlaneToTile(tileElement);
+                    }
+                });
+
+            } else {
             movePlaneToTile(tileElement);
+            }
             if (!boardReset) {
                 logMove(tileElement);
             } else {
@@ -148,11 +166,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (previousTile === undefined) {
             const startInfo = `Starting Position \n ${name}`;
             startPosition = name;
-            const startDiv = document.createElement('div');
-            startDiv.innerText = startInfo;
-            startDiv.dataset.name = name;
-            startDiv.classList.add('log-entry'); // Add class for styling and event handling
-            infoDiv.appendChild(startDiv);
+            // const startDiv = document.createElement('div');
+            // startDiv.innerText = startInfo;
+            // startDiv.dataset.name = name;
+            // startDiv.classList.add('log-entry'); // Add class for styling and event handling
+            // infoDiv.appendChild(startDiv);
             resetButton.hidden = false;
             startSpan.innerText = startInfo;
         } else {
@@ -179,9 +197,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calculateMoves(previousTile, currentTile) {
         // Get the index of the previous and current tiles in the tiles array
-        const prevIndex = tiles.findIndex(tile => tile.name === previousTile.innerText);
-        const currIndex = tiles.findIndex(tile => tile.name === currentTile.innerText);
-
+        const prevIndex = tiles.findIndex(tile => {
+            return parseInt(tile.x, 10) === parseInt(previousTile.dataset.x, 10) && parseInt(tile.y, 10) === parseInt(previousTile.dataset.y, 10);
+        });
+        // const currIndex = tiles.findIndex(tile => tile.name === currentTile.innerText);
+        const currIndex = tiles.findIndex(tile => {
+            return parseInt(tile.x, 10) === parseInt(currentTile.dataset.x, 10) && parseInt(tile.y, 10) === parseInt(currentTile.dataset.y, 10);
+        });
         // Calculate the number of moves based on the indices
         let moves = currIndex - prevIndex;
         if (moves < 0) {
@@ -222,8 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
         counterSpan.dataset.remaining = actualMoves.length
         moveStatusSpan.innerText = 'Moves Logged'
         counterSpan.innerText = actualMoves.length
-        
-        // getNextLandingSpot(startingTile, actualMoves[movesMade])
     }
 
     function highlightNextTile(currentTile, moves) {
@@ -232,7 +252,10 @@ document.addEventListener("DOMContentLoaded", function () {
             tile.classList.remove('highlighted');
         });
         // Get the index of the current tile in the tiles array
-        const currentIndex = tiles.findIndex(tile => tile.name === currentTile.innerText);
+        const currentIndex = tiles.findIndex(tile => {
+            return parseInt(tile.x, 10) === parseInt(currentTile.dataset.x, 10) && parseInt(tile.y, 10) === parseInt(currentTile.dataset.y, 10);
+        });
+
         if (currentIndex === -1) {
             console.error('Current tile not found.');
             return null;
@@ -248,15 +271,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Get the target tile from the tiles array
         const targetTile = tiles[targetIndex];
+        if (targetTile !== undefined) {
         const targetX = targetTile.x; // Ensure the result is positive and within bounds
         const targetY = targetTile.y;
         const targetTileElement = document.querySelector(`[data-x="${targetX}"][data-y="${targetY}"]`);
         if (targetTileElement) {
             targetTileElement.classList.add('highlighted');
         }
-
-        console.log(targetTile)
-        return targetTile;
+    } else {
+        // The end of logged moves has been reached.
+        counterSpan.innerHTML = 0
+    }
     }
 
     function setStart() {
@@ -270,6 +295,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         moveStatusSpan.innerHTML = ''
         counterSpan.innerHTML = ''
+        startSpan.innerHTML = ''
         movesMade = 0;
     }
     tiles.forEach(createTile);
