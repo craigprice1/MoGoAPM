@@ -1,21 +1,39 @@
-/* Your CSS styles here... */
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 100%;
-}
+#reset-button {
+    grid-column: 9 / span 2; /* Position button in the 9th column */
+    grid-row: 3; /* Position button in the 1st row */
+  }
 
-#left-section {
-    flex-grow: 1;
-    padding: 20px;
-}
+  #set-start-button {
+    grid-column: 9 / span 2; /* Position button in the 9th column */
+    grid-row: 3; /* Position button in the 1st row */
+  }
 
-#right-section {
-    flex-grow: 3;
-    padding: 20px;
-}
+  #counter-div {
+    grid-column: 9 / span 2; /* Span from column 8 to column 9 */
+    grid-row: 2 / span 1; /* Span from row 2 to row 3 */
+    border: 1px;
+    border-color: black;
+    text-align: center;
+  }
 
+  #starting-pos {
+    padding: 5px;
+    grid-column: 2 / span 7; /* Span from column 8 to column 9 */
+    grid-row: 2 / span 2; /* Span from row 2 to row 3 */
+    /*background-color: rgb(255, 255, 255); /* Red with 50% opacity */
+    color: white;
+    font-weight: bold;
+    border: 1px;
+    border-color: black;
+  }
+
+  #log-content {
+    grid-column: 2 / span 9; /* Span from column 8 to column 9 */
+    grid-row: 4 / span 7; /* Span from row 2 to row 3 */
+    background-color: rgb(255, 255, 255); /* Red with 50% opacity */
+    border: 1px;
+    border-color: black;
+  }
   
   #plane-icon {
     position: absolute;
