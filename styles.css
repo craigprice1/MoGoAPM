@@ -1,0 +1,100 @@
+/* Your CSS styles here... */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#left-section {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+#right-section {
+    flex-grow: 3;
+    padding: 20px;
+}
+
+  
+  #plane-icon {
+    position: absolute;
+    top: 0; /* Adjust as needed */
+    left: 0; /* Adjust as needed */
+    color: gold;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; /* Add a black outline */
+    transform: scaleX(-1); /* Flip the icon horizontally */
+  }
+
+.tile {
+    display: flex;
+    flex-direction: column; /* Arrange text and icon vertically */
+    justify-content: flex-start; /* Align text and icon to the top */
+    align-items: center;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10px;
+    border-radius: 5px;
+    overflow: hidden; /* Prevent content from overflowing */
+    position: relative; /* Ensure relative positioning for absolute positioning of icon */
+}
+
+/* Background color behind the text */
+.tile span {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background color */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Add padding for text */
+    border-top-left-radius: 5px; /* Adjust border radius for top left corner */
+    border-top-right-radius: 5px; /* Adjust border radius for top right corner */
+    width: 100%; /* Make the text span the full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* White background for the icon */
+.tile i {
+    /* background-color: white; White background */
+    padding: 3px; /* Add padding for icon */
+    border-radius: 5px; /* Adjust border radius */
+    position: absolute; /* Absolute positioning */
+    bottom: 0; /* Align icon to the bottom */
+    font-size: 27px; /* Set the default icon size */
+}
+
+.tile.active {
+    border: 2px solid red; /* Example border style */
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Example box shadow */
+    /* Add any other styling you want for active tiles */
+}
+
+.tile.highlighted {
+    background-color: lightgreen !important; /* Change background color to light green */
+    border: 2px dotted red !important; /* Add red dotted border */
+}
+
+
+
+/* Adjust font size for tile text */
+.tile span {
+    font-size: 10px; /* Set the default font size */
+}
+
+/* Adjust grid cell size */
+#board {
+    display: grid;
+    grid-template-columns: repeat(11, 56px); /* Each cell is 56px wide */
+    grid-template-rows: repeat(11, 56px); /* Each cell is 56px high */
+    gap: 2px; /* Gap between cells */
+    background-color: #5274cf;
+    border-radius: 5px;
+    width: 636px;
+}
+
+.log-entry {
+    padding: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.log-entry.strikethrough {
+    text-decoration: line-through;
+}
