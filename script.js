@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
         actualMoves = [];
         planeIcon.style.display = 'none';
         previousTile = undefined;
-        infoDiv.innerHTML = ''
+        infoDiv.innerHTML = 'Moves:'
         document.querySelectorAll('.tile').forEach(tile => {
             tile.classList.remove('highlighted');
             tile.classList.remove('active');
@@ -371,8 +371,11 @@ document.addEventListener("DOMContentLoaded", function () {
         moveStatusSpan.innerHTML = ''
         counterSpan.innerHTML = ''
         startSpan.innerHTML = ''
+        nextMoves.innerHTML = 'Moves from current position:'
+        nextMovesFromGo.innerHTML = 'Moves from go:'
         movesMade = 0;
         setStartButton.hidden = true;
+        moveToGoButton.hidden = true;
     }
 
     function nextStationTile(currentTile) {
