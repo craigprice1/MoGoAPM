@@ -121,10 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         // User wants to move to the next station
                         nextStation = document.querySelector(`.tile[data-name="${nextStationTile(tileElement)}"]`)
                         previousTile = nextStation
-                        document.querySelectorAll('.tile').forEach(tile => {
-                            tile.classList.remove('active');
-                        });
-                        nextStation.classList.add('active');
+                        // document.querySelectorAll('.tile').forEach(tile => {
+                        //     tile.classList.remove('active');
+                        // });
+                        // nextStation.classList.add('active');
                         movePlaneToTile(nextStation);
                         if (boardReset) highlightNextTile(nextStation, actualMoves[movesMade]);
 
@@ -139,10 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (!boardReset) {
                 logMove(tileElement);
-                document.querySelectorAll('.tile').forEach(tile => {
-                    tile.classList.remove('active');
-                });
-                tileElement.classList.add('active');
+                //tileElement.classList.add('active');
             } else {
                 // Calculate the next tile based on the number of moves
                 movesMade++; // Increment the current position
@@ -173,6 +170,11 @@ document.addEventListener("DOMContentLoaded", function () {
             planeIcon.style.left = `${tileCenterX - planeWidth / 2}px`; // Adjusted left position
             planeIcon.style.top = `${tileCenterY - planeHeight / 2}px`; // Adjusted top position
         }
+        document.querySelectorAll('.tile').forEach(tile => {
+            tile.classList.remove('active');
+        });
+        tileElement.classList.add('active');
+        console.log(tileElement)
     }
 
 
@@ -231,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // moveDiv.addEventListener('click', function () {
                 //     this.classList.toggle('strikethrough');
                 // });
+
             }
         }
         

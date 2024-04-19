@@ -61,7 +61,7 @@
     position: absolute;
     top: 0; /* Adjust as needed */
     left: 0; /* Adjust as needed */
-    color: gold;
+    color: silver;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; /* Add a black outline */
     transform: scaleX(-1); /* Flip the icon horizontally */
   }
@@ -103,6 +103,7 @@
 .tile.active {
     border: 2px solid red; /* Example border style */
     box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Example box shadow */
+    background-color: gold !important; /* Change background color to light green */
     /* Add any other styling you want for active tiles */
 }
 
