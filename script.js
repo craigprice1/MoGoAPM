@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextMovesFromGo = this.getElementById('go-moves')
     const resetButton = this.getElementById('reset-button')
     const undoButton = this.getElementById('undo-button')
+    const moveToGoButton = this.getElementById('move-to-go-button')
     const setStartButton = this.getElementById('set-start-button')
     const startSpan = this.getElementById('starting-pos')
     const planeIcon = this.getElementById('plane-icon')
     const infoDiv = document.getElementById('log-content');
-
-
+  
     // Function to create tiles on the board
     function createTile(tile) {
         const tileElement = document.createElement('div');
@@ -191,6 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
             startPosition = name;
             resetButton.hidden = false;
             undoButton.hidden = false;
+            moveToGoButton.hidden = false;
             startSpan.innerText = startInfo;
             previousTile = clickedTile
         } else {
@@ -248,6 +249,13 @@ document.addEventListener("DOMContentLoaded", function () {
         resetBoard();
     });
 
+    moveToGoButton.addEventListener('click', function () {
+        let GO = document.querySelector(`.tile[data-name="Go"]`);
+        previousTile = GO
+        movePlaneToTile(GO);
+        if (boardReset) highlightNextTile(GO, actualMoves[movesMade]);
+    })
+
     setStartButton.addEventListener('click', function () {
         setStart();
     })
@@ -269,6 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         resetButton.hidden = true;
         undoButton.hidden = true
+        moveToGoButton.hidden = false
         setStartButton.hidden = false;
         movePlaneToTile(startingTile)
 

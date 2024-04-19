@@ -13,6 +13,11 @@
     grid-row: 3; /* Position button in the 1st row */
   }
 
+  #move-to-go-button {
+    grid-column: 9 / span 2; /* Position button in the 9th column */
+    grid-row: 4; /* Position button in the 1st row */
+  }
+
   #counter-div {
     grid-column: 9 / span 2; /* Span from column 8 to column 9 */
     grid-row: 2 / span 1; /* Span from row 2 to row 3 */
