@@ -121,10 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         // User wants to move to the next station
                         nextStation = document.querySelector(`.tile[data-name="${nextStationTile(tileElement)}"]`)
                         previousTile = nextStation
-                        document.querySelectorAll('.tile').forEach(tile => {
-                            tile.classList.remove('active');
-                        });
-                        nextStation.classList.add('active');
                         movePlaneToTile(nextStation);
                         if (boardReset) highlightNextTile(nextStation, actualMoves[movesMade]);
 
@@ -139,10 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (!boardReset) {
                 logMove(tileElement);
-                document.querySelectorAll('.tile').forEach(tile => {
-                    tile.classList.remove('active');
-                });
-                tileElement.classList.add('active');
+                //tileElement.classList.add('active');
             } else {
                 // Calculate the next tile based on the number of moves
                 movesMade++; // Increment the current position
@@ -173,6 +166,11 @@ document.addEventListener("DOMContentLoaded", function () {
             planeIcon.style.left = `${tileCenterX - planeWidth / 2}px`; // Adjusted left position
             planeIcon.style.top = `${tileCenterY - planeHeight / 2}px`; // Adjusted top position
         }
+        document.querySelectorAll('.tile').forEach(tile => {
+            tile.classList.remove('active');
+        });
+        tileElement.classList.add('active');
+        console.log(tileElement)
     }
 
 
@@ -189,11 +187,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (previousTile === undefined) {
             const startInfo = `Starting Position \n ${name}`;
             startPosition = name;
-            // const startDiv = document.createElement('div');
-            // startDiv.innerText = startInfo;
-            // startDiv.dataset.name = name;
-            // startDiv.classList.add('log-entry'); // Add class for styling and event handling
-            // infoDiv.appendChild(startDiv);
             resetButton.hidden = false;
             undoButton.hidden = false;
             startSpan.innerText = startInfo;
@@ -205,12 +198,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (moves <= 12) {
                 const moveInfo = `${name} (${moves} moves)`;
                 actualMoves.push(moves)
-                // Create a new div element for the move and append it to the info div
-                // const moveDiv = document.createElement('div');
-                // moveDiv.innerText = moveInfo;
-                // moveDiv.dataset.name = name;
-                // moveDiv.classList.add('log-entry'); // Add class for styling and event handling
-                // infoDiv.appendChild(moveDiv);
                 infoDiv.textContent = `Moves \n ${actualMoves}`
                 previousTile = clickedTile
                 console.log(moves)
@@ -231,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // moveDiv.addEventListener('click', function () {
                 //     this.classList.toggle('strikethrough');
                 // });
+
             }
         }
         
