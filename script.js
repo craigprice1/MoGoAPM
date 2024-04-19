@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Add logic for if moves is greater than 12 then don't log it.
     // Add logic to show next 3 tiles you will hit.
     // Add logic to show next 3 tiles you will hit if you complete the board.
     // Complete the undo function
@@ -7,14 +6,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Ensure that when moves are logged in the log they spread over multiple lines.
     // Look at styling for mobile - e.g. the plane not positioning correctly on iPhone
     // Can this be made into an app?
-    const board = document.getElementById('board');
+
     let startPosition
     let previousTile
     let boardReset = false; // Flag to track if the board is reset
     let movesMade = 0; // Variable to keep track of the current position during replay
     let actualMoves = []; // Array to store actual moves made during replay
-    const boardWidth = 11; // Assuming a board with 11 columns
-    const boardHeight = 11; // Assuming a board with 11 rows
+    const board = document.getElementById('board');
     const counterSpan = this.getElementById('move-count')
     const moveStatusSpan = this.getElementById('move-status')
     const resetButton = this.getElementById('reset-button')
@@ -123,6 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         // User wants to move to the next station
                         nextStation = document.querySelector(`.tile[data-name="${nextStationTile(tileElement)}"]`)
                         previousTile = nextStation
+                        document.querySelectorAll('.tile').forEach(tile => {
+                            tile.classList.remove('active');
+                        });
+                        nextStation.classList.add('active');
                         movePlaneToTile(nextStation);
                         if (boardReset) highlightNextTile(nextStation, actualMoves[movesMade]);
 
@@ -137,6 +139,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             if (!boardReset) {
                 logMove(tileElement);
+                document.querySelectorAll('.tile').forEach(tile => {
+                    tile.classList.remove('active');
+                });
+                tileElement.classList.add('active');
             } else {
                 // Calculate the next tile based on the number of moves
                 movesMade++; // Increment the current position
@@ -144,12 +150,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 counterSpan.dataset.remaining = counterSpan.dataset.remaining -1
                 moveStatusSpan.innerText = 'Remaining Moves'
                 counterSpan.innerText = counterSpan.dataset.remaining
+                document.querySelectorAll('.tile').forEach(tile => {
+                    tile.classList.remove('active');
+                });
+                tileElement.classList.add('active');
             }
         });
     }
 
     function movePlaneToTile(tileElement) {
-        console.log(tileElement)
         // Get the coordinates of the center of the clicked tile
         const rect = tileElement.getBoundingClientRect();
         const tileCenterX = rect.left + rect.width / 2; // X-coordinate of the center of the tile
@@ -188,11 +197,12 @@ document.addEventListener("DOMContentLoaded", function () {
             resetButton.hidden = false;
             undoButton.hidden = false;
             startSpan.innerText = startInfo;
+            previousTile = clickedTile
         } else {
             // Display the tile name and the number of moves from the previous tile
             if (previousTile !== undefined) {
                 const moves = calculateMoves(previousTile, clickedTile);
-                console.log(previousTile, clickedTile)
+                if (moves <= 12) {
                 const moveInfo = `${name} (${moves} moves)`;
                 actualMoves.push(moves)
                 // Create a new div element for the move and append it to the info div
@@ -202,13 +212,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 // moveDiv.classList.add('log-entry'); // Add class for styling and event handling
                 // infoDiv.appendChild(moveDiv);
                 infoDiv.textContent = `Moves \n ${actualMoves}`
+                previousTile = clickedTile
+                console.log(moves)
+                console.log(previousTile)
+            } else {
+                movePlaneToTile(previousTile);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning!',
+                    text: 'You cannot move that many spaces.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 5000 // Adjust the duration as needed
+                });
+            }
                 // Add event listener to toggle strikethrough on click
                 // moveDiv.addEventListener('click', function () {
                 //     this.classList.toggle('strikethrough');
                 // });
             }
         }
-        previousTile = clickedTile
+        
+
     }
 
     function calculateMoves(previousTile, currentTile) {
@@ -244,12 +270,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Reset the board state
         boardReset = true;
 
+        document.querySelectorAll('.tile').forEach(tile => {
+            tile.classList.remove('active');
+        });
+
         const startingTileName = startPosition;
         const startingTile = document.querySelector(`.tile[data-name="${startingTileName}"]`);
-
         if (startingTile) {
             startingTile.classList.add('highlighted');
             previousTile = startingTile; // Set previousTile to the starting tile
+            startingTile.classList.add('active');
         }
         resetButton.hidden = true;
         undoButton.hidden = true
@@ -309,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
         infoDiv.innerHTML = ''
         document.querySelectorAll('.tile').forEach(tile => {
             tile.classList.remove('highlighted');
+            tile.classList.remove('active');
         });
         moveStatusSpan.innerHTML = ''
         counterSpan.innerHTML = ''
