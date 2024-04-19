@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const board = document.getElementById('board');
     const counterSpan = this.getElementById('move-count')
     const moveStatusSpan = this.getElementById('move-status')
+    const nextMoves = this.getElementById('next-moves')
+    const nextMovesFromGo = this.getElementById('go-moves')
     const resetButton = this.getElementById('reset-button')
     const undoButton = this.getElementById('undo-button')
     const setStartButton = this.getElementById('set-start-button')
@@ -218,11 +220,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 // moveDiv.addEventListener('click', function () {
                 //     this.classList.toggle('strikethrough');
                 // });
-
             }
         }
-        
-
     }
 
     function calculateMoves(previousTile, currentTile) {
@@ -252,7 +251,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setStartButton.addEventListener('click', function () {
         setStart();
     })
-
 
     function resetBoard() {
         // Reset the board state
@@ -313,10 +311,44 @@ document.addEventListener("DOMContentLoaded", function () {
         if (targetTileElement) {
             targetTileElement.classList.add('highlighted');
         }
+        nextMoves.innerText = `Moves from current position:`
+        let nextMovesList = futureMoves(currentTile)
+        for (let fm = 0 ; fm < nextMovesList.length; fm++) {
+            nextMoves.innerText += `\n${nextMovesList[fm]}`
+        }
+        nextMovesFromGo.innerText = `Moves from go:`
+        let futureMovesList = futureMoves(currentTile, 0)
+        for (let fm = 0 ; fm < futureMovesList.length; fm++) {
+            nextMovesFromGo.innerText += `\n${futureMovesList[fm]}`
+        }
     } else {
         // The end of logged moves has been reached.
         counterSpan.innerHTML = 0
     }
+    }
+
+    function futureMoves(currentTile, index) {
+        let currentIndex = index;
+        if (currentIndex === undefined) {
+        currentIndex = tiles.findIndex(tile => {
+            return parseInt(tile.x, 10) === parseInt(currentTile.dataset.x, 10) && parseInt(tile.y, 10) === parseInt(currentTile.dataset.y, 10);
+        });
+    }
+    const upcomingPositions = [];
+
+    // Initialize the starting index to calculate the upcoming positions
+    let targetIndex = currentIndex;
+
+    // Loop through the moves in actualMoves starting from movesMade
+    for (let i = movesMade; i < actualMoves.length; i++) {
+        // Calculate the target index in tiles array by adding the value from actualMoves
+        targetIndex = (targetIndex + actualMoves[i]) % tiles.length;
+        const nextTileName = tiles[targetIndex].name;
+
+        // Push the name of the upcoming position to the upcomingPositions array
+        upcomingPositions.push(nextTileName);
+    }
+    return upcomingPositions;
     }
 
     function setStart() {
