@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Add logic to show next 3 tiles you will hit.
-    // Add logic to show next 3 tiles you will hit if you complete the board.
     // Complete the undo function
     // Make the plane face the direction of travel
     // Ensure that when moves are logged in the log they spread over multiple lines.
