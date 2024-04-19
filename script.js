@@ -311,8 +311,16 @@ document.addEventListener("DOMContentLoaded", function () {
         if (targetTileElement) {
             targetTileElement.classList.add('highlighted');
         }
-        nextMoves.innerText = `Moves from current position: ${futureMoves(currentTile)}`
-        nextMovesFromGo.innerText = `Moves from go: ${futureMoves(currentTile, 0)}`
+        nextMoves.innerText = `Moves from current position:`
+        let nextMovesList = futureMoves(currentTile)
+        for (let fm = 0 ; fm < nextMovesList.length; fm++) {
+            nextMoves.innerText += `\n${nextMovesList[fm]}`
+        }
+        nextMovesFromGo.innerText = `Moves from go:`
+        let futureMovesList = futureMoves(currentTile, 0)
+        for (let fm = 0 ; fm < futureMovesList.length; fm++) {
+            nextMovesFromGo.innerText += `\n${futureMovesList[fm]}`
+        }
     } else {
         // The end of logged moves has been reached.
         counterSpan.innerHTML = 0
